@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+
+    <color name="Background">#002a5c</color>
+    <color name="White">#ffffff</color>
+    <color name="Black">#000000</color>
+
+    <color name="gold">#FFD700</color>
+
+    <color name="colorNavIcon">#dae9f6</color>
+    <color name="colorNavText">#01294b</color>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="red">#f0413b</color>
+    <color name="blue">#16365C</color>
+
+
+    <color name="Button">#0061ff</color>
+</resources>

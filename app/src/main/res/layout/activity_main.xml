@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Background"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="198dp"
+        app:srcCompat="@drawable/logo1" />
+
+    <EditText
+        android:id="@+id/phone"
+        android:layout_width="351dp"
+        android:layout_height="63dp"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:textColorHint="@color/Black"
+        android:layout_marginEnd="30dp"
+        android:textColor="@color/Black"
+        android:layout_marginBottom="-95dp"
+        android:background="@drawable/rounded_input"
+        android:ems="10"
+        android:hint="Phone Number"
+        android:inputType="phone"
+        android:textAlignment="center" />
+
+
+    <TextView
+        android:text="Format: +91 8888888888"
+        android:id="@+id/format"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/phone"
+        android:layout_marginTop="95dp"
+        android:gravity="center"
+        android:textColor="@color/White"/>
+
+    <EditText
+        android:id="@+id/verify"
+        android:layout_width="351dp"
+        android:layout_height="63dp"
+        android:textColor="@color/Black"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:textColorHint="@color/Black"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="-184dp"
+        android:background="@drawable/rounded_input"
+        android:ems="10"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:hint="Enter Your OTP"
+        android:inputType="number"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/otp"
+        android:layout_width="352dp"
+        android:layout_height="67dp"
+        android:layout_alignBottom="@+id/phone"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="-177dp"
+        android:background="#0061ff"
+        android:text="Send OTP"
+        android:textColor="@color/White"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/Login"
+        android:layout_width="352dp"
+        android:layout_height="72dp"
+        android:layout_alignEnd="@+id/otp"
+        android:layout_alignBottom="@+id/phone"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="-260dp"
+        android:background="#0061ff"
+        android:text="Verify"
+        android:textColor="@color/White"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        tools:visibility="visible" />
+
+
+</RelativeLayout>
