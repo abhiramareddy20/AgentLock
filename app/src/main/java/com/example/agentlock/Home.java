@@ -14,18 +14,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -56,8 +63,11 @@ public class Home extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance ();
         user = mAuth.getCurrentUser ().getUid ();
-        myref = FirebaseDatabase.getInstance ().getReference ("Loksmiths_Profile");
+        myref = FirebaseDatabase.getInstance ().getReference ("Loksmiths_Profile").child (user);
         PostImagesRef = FirebaseStorage.getInstance ().getReference ().child ("Loksmih_Profile_Images");
+
+
+
 
         Update = (Button) findViewById (R.id.Update_Profile);
         b1 = (Button) findViewById (R.id.LIC);
@@ -65,6 +75,7 @@ public class Home extends AppCompatActivity {
         number = (TextView) findViewById (R.id.phone);
         uNmae = (EditText) findViewById (R.id.name);
         E_mail = (EditText) findViewById (R.id.email);
+        loadingBar = new ProgressDialog (this);
 
 
         final String phone = getIntent ().getStringExtra ("Mobile");
@@ -91,11 +102,6 @@ public class Home extends AppCompatActivity {
                 }
 
 
-
-
-
-
-
                     Loksmith_details loksmith_details = new Loksmith_details (userName, mail, mobile);
                     FirebaseUser user = mAuth.getCurrentUser ();
                     myref.child (user.getUid ()).setValue (loksmith_details);
@@ -119,6 +125,27 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        myref.addValueEventListener (new ValueEventListener () {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists ()){
+                    String image = dataSnapshot.child ("image").getValue ().toString ();
+                    Glide.with (Home.this)
+                            .load (image)
+                            .into (profileImage);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
     }
 
 
@@ -128,7 +155,13 @@ public class Home extends AppCompatActivity {
         super.onActivityResult (requestCode, resultCode, data);
 
         if (requestCode==gallery && resultCode==RESULT_OK && data!=null){
+            loadingBar.setTitle ("Upload");
+            loadingBar.setMessage ("Please Wait while image to upload...");
+            loadingBar.setCanceledOnTouchOutside (false);
+            loadingBar.show ();
+
             Uri ImageUri = data.getData();
+
 
             CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
@@ -137,59 +170,82 @@ public class Home extends AppCompatActivity {
 
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            CropImage.ActivityResult result = CropImage.getActivityResult (data);
 
-            if(resultCode == RESULT_OK){
-
-                /*loadingBar.setTitle("set profile image");
-                loadingBar.setMessage("Please wait your image is updating...");
-                loadingBar.setCanceledOnTouchOutside(false);
-                loadingBar.show();
-*/
-                Uri resultUri = result.getUri();
+            if (resultCode == RESULT_OK) {
 
 
-                StorageReference filePath = PostImagesRef.child(user + ".jpg");
-                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                Uri resultUri = result.getUri ();
+
+
+                final StorageReference filePath = PostImagesRef.child (user + ".jpg");
+
+                filePath.putFile (resultUri).addOnSuccessListener (new OnSuccessListener<UploadTask.TaskSnapshot> () {
                     @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()){
-                            Toast.makeText(Home.this, " Image uploaded successfully", Toast.LENGTH_SHORT).show();
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                   filePath.getDownloadUrl ().addOnSuccessListener (new OnSuccessListener<Uri> () {
+                       @Override
+                       public void onSuccess(Uri uri) {
 
-                            String downloadUrl = task.getResult().getStorage ().getDownloadUrl().toString();
-
-                            myref.child(user).child("image")
-                                    .setValue(downloadUrl)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-
-                                            if(task.isSuccessful()){
-                                                Toast.makeText(Home.this, "Image Saved", Toast.LENGTH_SHORT).show();
-                                               // loadingBar.dismiss();
-
-                                            }else{
-                                                String message = task.getException().toString();
-                                                Toast.makeText(Home.this, "Error :" + message, Toast.LENGTH_SHORT).show();
-                                                loadingBar.dismiss();
-                                            }
-
+                           final String downloadUrl = uri.toString ();
+                           myref.child ("image").setValue (downloadUrl)
+                                   .addOnCompleteListener (new OnCompleteListener<Void> () {
+                                       @Override
+                                       public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful ())
+                                        {
+                                            Toast.makeText (Home.this, "Image saved to database", Toast.LENGTH_SHORT).show ();
+                                            loadingBar.dismiss ();
                                         }
-                                    });
-                        }else{
-                            String message = task.getException().toString();
-                            Toast.makeText(Home.this, "Error :" + message, Toast.LENGTH_SHORT).show();
-                            loadingBar.dismiss();
+                                        else
+                                        {
+                                            String message = task.getException ().getMessage ();
+                                            Toast.makeText (Home.this, "Error Occured", Toast.LENGTH_SHORT).show ();
+                                            loadingBar.dismiss ();
+                                        }
 
-                        }
 
+                                       }
+                                   });
+                       }
+                   });
                     }
                 });
             }
-
         }
 
 
     }
+
+
+    /*private void RetrieveUserInfo() {
+        myref.child("Loksmiths_Profile").child(user)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if((dataSnapshot.exists()) && (dataSnapshot.hasChild("image"))){
+                            String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
+
+                            Glide.with(getApplicationContext ())
+                                    .load(retrieveProfileImage)
+                                    .into(profileImage);
+                            //Picasso.get().load(retrieveProfileImage).into(profileImage);
+
+                        }else {
+
+                            Toast.makeText(Home.this, "Please set and update your profile information....", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+*/
+
+
 
 }
