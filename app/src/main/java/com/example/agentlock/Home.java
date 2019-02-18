@@ -51,7 +51,7 @@ public class Home extends AppCompatActivity {
     private static final int gallery = 1;
     ImageButton profileImage;
     private String user;
-    private EditText uNmae,E_mail;
+    private EditText uNmae,E_mail,aadhar;
     private TextView number;
     private ProgressDialog loadingBar;
     private  String saveCurrentDate,saveCurrentTime,postRandomName;
@@ -70,7 +70,7 @@ public class Home extends AppCompatActivity {
 
 
         Update = (Button) findViewById (R.id.Update_Profile);
-        b1 = (Button) findViewById (R.id.LIC);
+        aadhar =(EditText)findViewById (R.id.adhar);
         profileImage = (ImageButton) findViewById (R.id.agentImage);
         number = (TextView) findViewById (R.id.phone);
         uNmae = (EditText) findViewById (R.id.name);
@@ -78,8 +78,10 @@ public class Home extends AppCompatActivity {
         loadingBar = new ProgressDialog (this);
 
 
+
         final String phone = getIntent ().getStringExtra ("Mobile");
         number.setText (phone);
+
 
         Update.setOnClickListener (new View.OnClickListener () {
             @Override
@@ -88,21 +90,25 @@ public class Home extends AppCompatActivity {
                 String userName = uNmae.getText ().toString ().trim ();
                 String mail = E_mail.getText ().toString ().trim ();
                 String mobile = phone;
-
-
-
+                String KYC = aadhar.getText ().toString ().trim ();
 
                 if (TextUtils.isEmpty (userName)) {
                     Toast.makeText (Home.this, "Plaese fill all the details", Toast.LENGTH_SHORT).show ();
                     return;
                 }
                 if (TextUtils.isEmpty (mail)) {
-                    Toast.makeText (Home.this, "Please Enter the Email address", Toast.LENGTH_SHORT).show ();
+                    Toast.makeText (Home.this, "Please Fill all the Details", Toast.LENGTH_SHORT).show ();
+                    return;
+                }
+                if(TextUtils.isEmpty (KYC))
+                {
+                    Toast.makeText (Home.this, "Please Fill all the details", Toast.LENGTH_SHORT).show ();
                     return;
                 }
 
 
-                    Loksmith_details loksmith_details = new Loksmith_details (userName, mail, mobile);
+
+                    Loksmith_details loksmith_details = new Loksmith_details (userName, mail, mobile,KYC);
                     FirebaseUser user = mAuth.getCurrentUser ();
                     myref.child (user.getUid ()).setValue (loksmith_details);
 
@@ -114,6 +120,7 @@ public class Home extends AppCompatActivity {
 
 
         });
+
         profileImage.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick(View view) {
@@ -125,11 +132,11 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        myref.addValueEventListener (new ValueEventListener () {
+        myref.child ("image").addValueEventListener (new ValueEventListener () {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists ()){
-                    String image = dataSnapshot.child ("image").getValue ().toString ();
+                    String image = dataSnapshot.getValue ().toString ();
                     Glide.with (Home.this)
                             .load (image)
                             .into (profileImage);
@@ -143,12 +150,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
-
-
-
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -218,33 +220,6 @@ public class Home extends AppCompatActivity {
     }
 
 
-    /*private void RetrieveUserInfo() {
-        myref.child("Loksmiths_Profile").child(user)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        if((dataSnapshot.exists()) && (dataSnapshot.hasChild("image"))){
-                            String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
-
-                            Glide.with(getApplicationContext ())
-                                    .load(retrieveProfileImage)
-                                    .into(profileImage);
-                            //Picasso.get().load(retrieveProfileImage).into(profileImage);
-
-                        }else {
-
-                            Toast.makeText(Home.this, "Please set and update your profile information....", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-    }
-*/
 
 
 

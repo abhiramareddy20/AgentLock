@@ -47,13 +47,12 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance ();
 
 
-        /*FirebaseUser user = mAuth.getCurrentUser ();
+        FirebaseUser user = mAuth.getCurrentUser ();
         if(user != null)
         {
             finish ();
             startActivity (new Intent (MainActivity.this,Home.class));
         }
-*/
         verify = (Button)findViewById (R.id.Login);
         sendOTP = (Button)findViewById (R.id.otp);
         mobile = (EditText)findViewById (R.id.phone);
