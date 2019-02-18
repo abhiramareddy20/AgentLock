@@ -77,7 +77,7 @@ public class Home extends AppCompatActivity {
         E_mail = (EditText) findViewById (R.id.email);
         loadingBar = new ProgressDialog (this);
 
-
+//
 
         final String phone = getIntent ().getStringExtra ("Mobile");
         number.setText (phone);

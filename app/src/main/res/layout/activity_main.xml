@@ -15,6 +15,7 @@
         android:layout_height="198dp"
         app:srcCompat="@drawable/logo1" />
 
+
     <EditText
         android:id="@+id/phone"
         android:layout_width="351dp"

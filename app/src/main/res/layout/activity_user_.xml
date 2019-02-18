@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     android:background="@color/Background"
     tools:context=".User_Activity">
 
@@ -13,12 +14,10 @@
         android:id="@+id/imageView2"
         android:layout_width="188dp"
         android:layout_height="133dp"
-        android:layout_marginLeft="100dp"
         app:srcCompat="@drawable/upload222"
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:layout_marginLeft="126dp"
         android:id="@+id/button"
         android:layout_width="134dp"
         android:layout_height="35dp"
@@ -28,45 +27,39 @@
         tools:ignore="MissingConstraints" />
 
 
-    <EditText
-        android:id="@+id/verify"
-        android:layout_width="351dp"
-        android:layout_height="63dp"
-        android:textColor="@color/Black"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="30dp"
-        android:background="@drawable/rounded_input"
-        android:hint="Enter Your OTP"
-        android:inputType="number"
-        android:textAlignment="center" />
-
-
     <Button
         android:layout_marginTop="30dp"
         android:textColor="@color/White"
         android:id="@+id/Submit"
-        android:layout_marginLeft="100dp"
         android:layout_width="198dp"
         android:layout_height="55dp"
-        android:text="SUBMIT OTP"
+        android:text="Start Service"
         android:background="@color/Button"
         tools:layout_editor_absoluteX="106dp"
         tools:layout_editor_absoluteY="324dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints,OnClick" />
+
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/White"/>
 
 
     <Button
         android:layout_marginTop="30dp"
         android:textColor="@color/White"
         android:id="@+id/End"
-        android:layout_marginLeft="100dp"
         android:layout_width="198dp"
         android:layout_height="55dp"
         android:text="END SERVICE"
         android:background="@color/Button"
         tools:layout_editor_absoluteX="106dp"
         tools:layout_editor_absoluteY="324dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints,OnClick" />
 
 
 
