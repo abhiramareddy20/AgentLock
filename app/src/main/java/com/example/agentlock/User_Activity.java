@@ -65,6 +65,7 @@ public class User_Activity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance ();
         user = mAuth.getCurrentUser ().getUid ();
         myref = FirebaseDatabase.getInstance ().getReference ("Loksmiths_Profile").child (user);
+        PostImagesRef = FirebaseStorage.getInstance ().getReference ().child ("Loksmih_Camera_Images");
 
 
         img = (ImageView)findViewById (R.id.imageView2);
@@ -93,6 +94,10 @@ public class User_Activity extends AppCompatActivity {
                 //Chronometer_Time chronometer_time = new Chronometer_Time (pauseChronometer);
                 FirebaseUser user = mAuth.getCurrentUser ();
                 myref.child ("time").setValue (minutes);
+
+                Intent i = new Intent (User_Activity.this,Jobs.class);
+                startActivity (i);
+                finish ();
 
             }
         });
