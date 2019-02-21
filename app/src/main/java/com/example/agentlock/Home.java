@@ -66,9 +66,6 @@ public class Home extends AppCompatActivity {
         myref = FirebaseDatabase.getInstance ().getReference ("Loksmiths_Profile").child (user);
         PostImagesRef = FirebaseStorage.getInstance ().getReference ().child ("Loksmih_Profile_Images");
 
-
-
-
         Update = (Button) findViewById (R.id.Update_Profile);
         aadhar =(EditText)findViewById (R.id.adhar);
         profileImage = (ImageButton) findViewById (R.id.agentImage);
@@ -77,7 +74,6 @@ public class Home extends AppCompatActivity {
         E_mail = (EditText) findViewById (R.id.email);
         loadingBar = new ProgressDialog (this);
 
-//
 
         final String phone = getIntent ().getStringExtra ("Mobile");
         number.setText (phone);
@@ -105,8 +101,6 @@ public class Home extends AppCompatActivity {
                     Toast.makeText (Home.this, "Please Fill all the details", Toast.LENGTH_SHORT).show ();
                     return;
                 }
-
-
 
                     Loksmith_details loksmith_details = new Loksmith_details (userName, mail, mobile,KYC);
                     FirebaseUser user = mAuth.getCurrentUser ();
